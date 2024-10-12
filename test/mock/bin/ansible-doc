@@ -1,0 +1,21 @@
+#!/bin/sh
+# A mock version of ansible-doc which returns a pre-canned JSON response.
+#
+# NOTE: This script does not implement the entire command-line interface of
+# ansible-doc, it implements only the bare minimum we need for testing.
+
+[ '-j' = "$1" ] && shift
+# TODO: listing of modules
+
+
+file="test/mock/json/$1.json"
+if [ -r "$file" ]; then
+	cat $file
+else
+	# NOTE: ANSI escape codes:
+	#    0: Reset text attributes
+	#    1: Set text to bold
+	#   35: Set foreground colour to magenta
+	printf "\033[1;35m[WARNING]: $1 was not found\033[0m\n" >&2
+	printf '{}\n'
+fi
