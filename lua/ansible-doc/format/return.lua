@@ -23,7 +23,7 @@ local function put_item(bufnr, name, item)
 end
 
 return function(bufnr, items)
-	put(bufnr, {'', 'RETURN VALUES:'})
+	put(bufnr, {'', 'RETURN VALUES'})
 	local names = vim.tbl_keys(items)
 	table.sort(names)
 	for _, name in ipairs(names) do

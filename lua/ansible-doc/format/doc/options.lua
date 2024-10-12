@@ -29,7 +29,7 @@ end
 
 
 return function(bufnr, options)
-	put(bufnr, {'', 'OPTIONS (red indicates it is required):'})
+	put(bufnr, {'', 'OPTIONS (red indicates it is required)'})
 
 	local names = vim.tbl_keys(options)
 	table.sort(names)

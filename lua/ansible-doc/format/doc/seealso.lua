@@ -15,7 +15,7 @@ end
 
 
 return function(bufnr, seealso)
-	put(bufnr, {'', 'SEE ALSO:'})
+	put(bufnr, {'', 'SEE ALSO'})
 
 	for _, item in ipairs(seealso) do
 		put_item(bufnr, item)

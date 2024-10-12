@@ -27,7 +27,7 @@ local function put_attribute(bufnr, name, attribute)
 end
 
 return function (bufnr, attributes)
-	put(bufnr, {'', 'ATTRIBUTES:'})
+	put(bufnr, {'', 'ATTRIBUTES'})
 
 	local names = vim.tbl_keys(attributes)
 	table.sort(attributes)

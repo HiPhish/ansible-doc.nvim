@@ -8,7 +8,7 @@ end
 return function(bufnr, notes)
 	put(bufnr, {
 		'',
-		'NOTES:',
+		'NOTES',
 	})
 	for _, note in ipairs(notes) do
 		format_note(bufnr, note)
