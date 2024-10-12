@@ -1,1 +1,1 @@
-setlocal textwidth=78 expandtab
+setlocal textwidth=78 expandtab nonumber nospell
