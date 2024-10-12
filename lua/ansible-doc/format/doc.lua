@@ -8,7 +8,7 @@ local put = require('ansible-doc.format.util').put
 
 return function(bufnr, doc)
 	vim.api.nvim_buf_set_lines(bufnr, 0, 1, true, {string.format('MODULE %s (%s)', doc.plugin_name, doc.filename)})
-	vim.fn.append(vim.fn.line('$'), '')
+	vim.fn.appendbufline(bufnr, '$', '')
 	description(bufnr, doc.description)
 	if doc.has_action then
 		put(bufnr, {'', '* note: This module has a corresponding action plugin.'})

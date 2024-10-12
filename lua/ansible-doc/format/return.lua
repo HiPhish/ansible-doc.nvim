@@ -1,5 +1,5 @@
 local put = require('ansible-doc.format.util').put
-local append, line = vim.fn.append, vim.fn.line
+local appendbufline = vim.fn.appendbufline
 
 
 local KEYS = {'returned', 'sample', 'type'}
@@ -11,12 +11,13 @@ local LABELS = {
 
 local function put_item(bufnr, name, item)
 	put(bufnr, {'', string.format('  %s', name)})
-	append(line('$'), string.format('    %s', item.description))
+	appendbufline(bufnr, '$', string.format('    %s', item.description))
 	vim.cmd 'normal! Ggww'
 	for _, key in ipairs(KEYS) do
 		local value = item[key]
 		if value then
-			append(line('$'), string.format('    %s: %s', LABELS[key], value))
+			-- FIXME: The formatting depends on the `type` field of the item
+			appendbufline(bufnr, '$', string.format('    %s: %s', LABELS[key], value))
 		end
 	end
 end

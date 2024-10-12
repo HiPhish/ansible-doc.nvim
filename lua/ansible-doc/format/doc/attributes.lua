@@ -15,13 +15,13 @@ local function put_attribute(bufnr, name, attribute)
 		'',
 		string.format('  %s', name),
 	})
-	vim.fn.append(vim.fn.line('$'), string.format('    %s', attribute.description))
+	vim.fn.appendbufline(bufnr, '$', string.format('    %s', attribute.description))
 	vim.cmd 'normal! Ggww'
-	vim.fn.append(vim.fn.line('$'), '')
+	vim.fn.appendbufline(bufnr, '$', '')
 	for _, key in ipairs(KEYS) do
 		local value = attribute[key]
 		if value then
-			vim.fn.append(vim.fn.line('$'), string.format('    %s: %s', LABELS[key], value))
+			vim.fn.appendbufline(bufnr, '$', string.format('    %s: %s', LABELS[key], value))
 		end
 	end
 end
@@ -33,6 +33,6 @@ return function (bufnr, attributes)
 	table.sort(attributes)
 
 	for _, name in ipairs(names) do
-		put_attribute(0, name, attributes[name])
+		put_attribute(bufnr, name, attributes[name])
 	end
 end

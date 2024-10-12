@@ -16,13 +16,13 @@ local function put_option(bufnr, name, option)
 		'',
 		string.format('  %s', name),
 	})
-	vim.fn.append(vim.fn.line('$'), string.format('    %s', table.concat(option.description, '  ')))
+	vim.fn.appendbufline(bufnr, '$', string.format('    %s', table.concat(option.description, '  ')))
 	vim.cmd 'normal! Ggww'
-	vim.fn.append(vim.fn.line('$'), '')
+	vim.fn.appendbufline(bufnr, '$', '')
 	for _, key in ipairs(keys) do
 		local value = option[key]
 		if value then
-			vim.fn.append(vim.fn.line('$'), string.format('    %s: %s', labels[key], value))
+			vim.fn.appendbufline(bufnr, '$', string.format('    %s: %s', labels[key], value))
 		end
 	end
 end

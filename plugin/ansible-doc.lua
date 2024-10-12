@@ -25,6 +25,8 @@ local function render_doc(params)
 	local doc = ansible_doc.doc(name)
 	local bufname = string.format('ansibledoc://%s', name)
 	local buffer, window
+	-- Whether the document is getting opened for the first time
+	local first_time = false
 
 	-- Find previously opened buffer or create a new one
 	for _, buf in ipairs(api.nvim_list_bufs()) do
@@ -35,16 +37,20 @@ local function render_doc(params)
 	if not buffer then
 		buffer = api.nvim_create_buf(true, false)
 		api.nvim_buf_set_name(buffer, bufname)
-		vim.bo[buffer].filetype = 'ansibledoc'
-		api.nvim_set_option_value('filetype', filetype, {buf=buffer})
+		first_time = true
 	end
 
-	-- Find an already open Ansible documentation window or a open a new one
-	for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
-		local buf = api.nvim_win_get_buf(win)
-		if api.nvim_get_option_value('filetype', {buf=buf}) == filetype then
-			window = win
-			break
+	-- Try the current window first, then try an already open window, otherwise
+	-- open a new one
+	if api.nvim_get_option_value('filetype', {buf=api.nvim_win_get_buf(0)}) == filetype then
+		window = 0
+	else
+		for _, win in ipairs(api.nvim_tabpage_list_wins(0)) do
+			local buf = api.nvim_win_get_buf(win)
+			if api.nvim_get_option_value('filetype', {buf=buf}) == filetype then
+				window = win
+				break
+			end
 		end
 	end
 	if not window then
@@ -54,12 +60,15 @@ local function render_doc(params)
 		api.nvim_tabpage_set_win(0, window)
 	end
 
-	-- TODO: only do this if the buffer is newly created
-	ansible_doc.render(0, doc)
-	api.nvim_set_option_value('filetype', filetype, {buf=buffer})
-	api.nvim_set_option_value('buftype', 'nofile', {buf=buffer})
-	api.nvim_set_option_value('modifiable', false, {buf=buffer})
-	api.nvim_set_option_value('readonly', false, {buf=buffer})
+	if first_time then
+		api.nvim_set_option_value('filetype', filetype, {buf=buffer})
+		vim.fn.bufload(buffer)
+		ansible_doc.render(buffer, doc)
+		api.nvim_set_option_value('filetype', filetype, {buf=buffer})
+		api.nvim_set_option_value('buftype', 'nofile', {buf=buffer})
+		api.nvim_set_option_value('modifiable', false, {buf=buffer})
+		api.nvim_set_option_value('readonly', false, {buf=buffer})
+	end
 end
 
 vim.api.nvim_create_user_command('AnsibleDoc', render_doc, {
