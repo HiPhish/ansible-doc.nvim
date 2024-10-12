@@ -1,4 +1,4 @@
 .PHONY: check
 
 check:
-	./test/bin/busted test/
+	./test/bin/busted

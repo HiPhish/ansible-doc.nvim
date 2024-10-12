@@ -1,5 +1,7 @@
 return {
 	_all = {
-		lua = "./test/bin/lua"
-	}
+		lua = './test/bin/lua',
+		ROOT = {'test/e2e'},
+		pattern = '',
+	},
 }

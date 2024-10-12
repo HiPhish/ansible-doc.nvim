@@ -11,7 +11,7 @@ end
 ---@param module string  Fully qualified module name
 ---@return table doc  The documentation as a Lua table
 function M.doc(module)
-	local ansibledocprg = vim.g.ansibledocprg or 'ansible-doc'
+	local ansibledocprg = vim.g['ansibledocprg'] or 'ansible-doc'
 	local obj = vim.system({ansibledocprg, '-j', module}, {text=true}):wait()
 	if obj.code ~= 0 then
 		error(obj.stderr)

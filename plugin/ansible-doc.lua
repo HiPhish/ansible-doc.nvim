@@ -62,12 +62,10 @@ local function render_doc(params)
 
 	if first_time then
 		api.nvim_set_option_value('filetype', filetype, {buf=buffer})
-		vim.fn.bufload(buffer)
 		ansible_doc.render(buffer, doc)
-		api.nvim_set_option_value('filetype', filetype, {buf=buffer})
 		api.nvim_set_option_value('buftype', 'nofile', {buf=buffer})
 		api.nvim_set_option_value('modifiable', false, {buf=buffer})
-		api.nvim_set_option_value('readonly', false, {buf=buffer})
+		api.nvim_set_option_value('readonly', true, {buf=buffer})
 	end
 end
 
