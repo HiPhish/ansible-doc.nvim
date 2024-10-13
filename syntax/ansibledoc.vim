@@ -4,17 +4,11 @@ endif
 
 syntax case  ignore
 
-syntax match ansibledocHeader         display '\v^MODULE\s\S+'
 syntax match ansibledocSectionHeading display '\v^(\w+\s*)+\ze.*'
+syntax match ansibledocHeader         display '\v^MODULE\s\S+'
 syntax match ansibledocCode           display "\v'[^']+'"
 
-" List of special inline-syntax markers;
-"   - M: Module name, this is like a hyperlink
-"   - C: Code
-"   - O: Option
-"   - B: Emphasis (bold)
-"   - V: Literal value
-"   - L: Hyperlink
+" Special inline-syntax markers;
 syntax region ansibledocModule  concealends matchgroup=Conceal start='\vM\(' end='\v\)'
 syntax region ansibledocCode    concealends matchgroup=Conceal start='\vC\(' end='\v\)'
 syntax region ansibledocOption  concealends matchgroup=Conceal start='\vO\(' end='\v\)'
