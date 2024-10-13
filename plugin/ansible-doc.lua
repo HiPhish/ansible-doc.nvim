@@ -68,6 +68,7 @@ local function render_doc(params)
 		api.nvim_set_option_value('modifiable', false, {buf=buffer})
 		api.nvim_set_option_value('readonly', true, {buf=buffer})
 	end
+	api.nvim_win_set_cursor(0, {1, 0})
 end
 
 vim.api.nvim_create_user_command('AnsibleDoc', render_doc, {
