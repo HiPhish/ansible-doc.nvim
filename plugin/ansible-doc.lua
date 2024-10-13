@@ -36,6 +36,8 @@ local function render_doc(params)
 	end
 	if not buffer then
 		buffer = api.nvim_create_buf(true, false)
+		api.nvim_set_option_value('swapfile', false, {buf=buffer})
+		api.nvim_set_option_value('buftype', 'nofile', {buf=buffer})
 		api.nvim_buf_set_name(buffer, bufname)
 		first_time = true
 	end
@@ -63,7 +65,6 @@ local function render_doc(params)
 	if first_time then
 		api.nvim_set_option_value('filetype', filetype, {buf=buffer})
 		ansible_doc.render(buffer, doc)
-		api.nvim_set_option_value('buftype', 'nofile', {buf=buffer})
 		api.nvim_set_option_value('modifiable', false, {buf=buffer})
 		api.nvim_set_option_value('readonly', true, {buf=buffer})
 	end
