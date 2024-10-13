@@ -22,16 +22,29 @@ highlight default link ansibledocCode           Comment
 highlight default link ansibledocOption         Type
 highlight default link ansibledocLiteral        Constant
 highlight default      ansibledocEmph           cterm=italic gui=italic
+highlight default link ansibledocAttribute      Identifier
+highlight default link ansibledocReturnVal      Identifier
 
 
-" Highlight the option definitions inside the OPTIONS block the same as inline
-" options
-syntax match ansibledocOption '\v  \w+$' contained 
+" Highlight the option definitions inside the various sections.  Options are
+" special because they use the same highlight group as inline options.
+syntax match ansibledocOption '\v^  \w+$' contained 
 syntax region ansibledocOptions matchgroup=ansibledocSectionHeading
 	\ start='\v^OPTIONS'
 	\ end='\v\ze^\w+.*$'
 	\ contains=ansibledocOption
 
+syntax match ansibledocAttribute '\v^  \w+$' contained 
+syntax region ansibledocAttributes matchgroup=ansibledocSectionHeading
+	\ start='\v^ATTRIBUTES'
+	\ end='\v\ze^\w+.*$'
+	\ contains=ansibledocAttribute
+
+syntax match ansibledocReturnVal '\v^  \w+$' contained 
+syntax region ansibledocAttributes matchgroup=ansibledocSectionHeading
+	\ start='\v^RETURN VALUES'
+	\ end='\v\ze^\w+.*$'
+	\ contains=ansibledocReturnVal
 
 " This file might have been sourced as part of some some other syntax file.
 " If that is the case we have to stop here to avoid undesirable side effects.
