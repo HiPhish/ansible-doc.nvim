@@ -28,7 +28,9 @@ local render_return = require 'ansible-doc.format.return'
 function M.render(bufnr, data)
 	render_doc(bufnr, data.doc)
 	render_examples(bufnr, data.examples)
-	render_return(bufnr, data['return'])
+	if data['return'] ~= vim.NIL then
+		render_return(bufnr, data['return'])
+	end
 end
 
 return M
