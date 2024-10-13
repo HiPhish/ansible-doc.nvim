@@ -23,8 +23,20 @@ highlight default link ansibledocOption         Type
 highlight default link ansibledocLiteral        Constant
 highlight default      ansibledocEmph           cterm=italic gui=italic
 
+
+" Highlight the option definitions inside the OPTIONS block the same as inline
+" options
+syntax match ansibledocOption '\v  \w+$' contained 
+syntax region ansibledocOptions matchgroup=ansibledocSectionHeading
+	\ start='\v^OPTIONS'
+	\ end='\v\ze^\w+.*$'
+	\ contains=ansibledocOption
+
+
+" This file might have been sourced as part of some some other syntax file.
+" If that is the case we have to stop here to avoid undesirable side effects.
 if &filetype != 'ansibledoc'
-  finish |" May have been included by some other file type.
+  finish
 endif
 
 " The Examples section contains raw YAML code.
