@@ -14,6 +14,12 @@ syntax match ansibledocCode           display "\v'[^']+'"
 "   - O: Option
 "   - B: Emphasis (bold)
 "   - V: Literal value
+"   - L: Hyperlink
+syntax region ansibledocModule  concealends matchgroup=Conceal start='\vM\(' end='\v\)'
+syntax region ansibledocCode    concealends matchgroup=Conceal start='\vC\(' end='\v\)'
+syntax region ansibledocOption  concealends matchgroup=Conceal start='\vO\(' end='\v\)'
+syntax region ansibledocEmph    concealends matchgroup=Conceal start='\vB\(' end='\v\)'
+syntax region ansibledocLiteral concealends matchgroup=Conceal start='\vV\(' end='\v\)'
 
 highlight default link ansibledocHeader         Title
 highlight default link ansibledocSectionHeading Statement
