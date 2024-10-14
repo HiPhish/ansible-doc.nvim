@@ -20,6 +20,7 @@ highlight default link ansibledocSectionHeading Statement
 highlight default link ansibledocModule         Underlined
 highlight default link ansibledocCode           Comment
 highlight default link ansibledocOption         Type
+highlight default link ansibledocOptionRequired Special
 highlight default link ansibledocLiteral        Constant
 highlight default      ansibledocEmph           cterm=italic gui=italic
 highlight default link ansibledocAttribute      Identifier
@@ -29,10 +30,11 @@ highlight default link ansibledocReturnVal      Identifier
 " Highlight the option definitions inside the various sections.  Options are
 " special because they use the same highlight group as inline options.
 syntax match ansibledocOption '\v^  \w+$' contained 
+syntax match ansibledocOptionRequired '\v^  \w+ \(required\)$' contained 
 syntax region ansibledocOptions matchgroup=ansibledocSectionHeading
 	\ start='\v^OPTIONS'
 	\ end='\v\ze^\w+.*$'
-	\ contains=ansibledocOption
+	\ contains=ansibledocOption,ansibledocOptionRequired
 
 syntax match ansibledocAttribute '\v^  \w+$' contained 
 syntax region ansibledocAttributes matchgroup=ansibledocSectionHeading

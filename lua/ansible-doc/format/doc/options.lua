@@ -14,7 +14,7 @@ local keys = {'default', 'elements', 'type'}
 local function put_option(bufnr, name, option)
 	put(bufnr, {
 		'',
-		string.format('  %s', name),
+		string.format('  %s%s', name, option.required and ' (required)' or ''),
 	})
 	vim.fn.appendbufline(bufnr, '$', string.format('    %s', table.concat(option.description, '  ')))
 	vim.cmd 'normal! Ggww'
@@ -30,6 +30,7 @@ end
 
 return function(bufnr, options)
 	put(bufnr, {'', 'OPTIONS (red indicates it is required)'})
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocOptionRequired', vim.api.nvim_buf_line_count(bufnr)-1, 9, 12)
 
 	local names = vim.tbl_keys(options)
 	table.sort(names)
