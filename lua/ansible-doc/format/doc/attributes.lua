@@ -15,6 +15,9 @@ local function put_attribute(bufnr, name, attribute)
 		'',
 		string.format('  %s', name),
 	})
+	local linenr = vim.api.nvim_buf_line_count(bufnr) - 1
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocAttribute', linenr, 2, 2 + #name)
+
 	vim.fn.appendbufline(bufnr, '$', string.format('    %s', attribute.description))
 	vim.cmd 'normal! Ggww'
 	vim.fn.appendbufline(bufnr, '$', '')
@@ -35,6 +38,8 @@ end
 
 return function (bufnr, attributes)
 	put(bufnr, {'', 'ATTRIBUTES'})
+	local linenr = vim.api.nvim_buf_line_count(bufnr) - 1
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocSectionHeading', linenr, 0,  #'ATTRIBUTES')
 
 	local names = vim.tbl_keys(attributes)
 	table.sort(attributes)

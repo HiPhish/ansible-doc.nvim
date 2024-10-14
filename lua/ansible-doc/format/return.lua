@@ -40,6 +40,9 @@ end
 
 local function put_item(bufnr, name, item)
 	put(bufnr, {'', string.format('  %s', name)})
+	local linenr = vim.api.nvim_buf_line_count(bufnr) - 1
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocAttribute', linenr, 2, 2 + #name)
+
 	appendbufline(bufnr, '$', string.format('    %s', item.description))
 	vim.cmd 'normal! Ggww'
 	for _, key in ipairs(KEYS) do
@@ -50,6 +53,8 @@ end
 
 return function(bufnr, items)
 	put(bufnr, {'', 'RETURN VALUES'})
+	local linenr = vim.api.nvim_buf_line_count(bufnr) - 1
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocSectionHeading', linenr, 0,  #'RETURN VALUES')
 	local names = vim.tbl_keys(items)
 	table.sort(names)
 	for _, name in ipairs(names) do

@@ -16,6 +16,12 @@ local function put_option(bufnr, name, option)
 		'',
 		string.format('  %s%s', name, option.required and ' (required)' or ''),
 	})
+	local linenr = vim.api.nvim_buf_line_count(bufnr) - 1
+	if option.required then
+		vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocOptionRequired', linenr, 2, 2 + #name)
+	else
+		vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocOption', linenr, 2, 2 + #name)
+	end
 	vim.fn.appendbufline(bufnr, '$', string.format('    %s', table.concat(option.description, '  ')))
 	vim.cmd 'normal! Ggww'
 	vim.fn.appendbufline(bufnr, '$', '')
@@ -30,7 +36,9 @@ end
 
 return function(bufnr, options)
 	put(bufnr, {'', 'OPTIONS (red indicates it is required)'})
-	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocOptionRequired', vim.api.nvim_buf_line_count(bufnr)-1, 9, 12)
+	local linenr = vim.api.nvim_buf_line_count(bufnr) - 1
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocSectionHeading', linenr, 0,  7)
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocOptionRequired', linenr, 9, 12)
 
 	local names = vim.tbl_keys(options)
 	table.sort(names)

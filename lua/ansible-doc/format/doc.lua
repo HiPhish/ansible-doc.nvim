@@ -8,6 +8,7 @@ local put = require('ansible-doc.format.util').put
 
 return function(bufnr, doc)
 	vim.api.nvim_buf_set_lines(bufnr, 0, 1, true, {string.format('MODULE %s (%s)', doc.plugin_name, doc.filename)})
+	vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocHeader', 0, 0,  #'MODULE ' + #doc.plugin_name)
 	vim.fn.appendbufline(bufnr, '$', '')
 	description(bufnr, doc.description)
 	if doc.has_action then
