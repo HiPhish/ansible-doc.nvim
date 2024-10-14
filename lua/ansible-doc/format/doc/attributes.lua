@@ -1,7 +1,7 @@
 local put = require('ansible-doc.format.util').put
 
 
-local KEYS = {'details', 'platforms', 'support'}
+local KEYS = {'platforms', 'support'}
 
 local LABELS = {
 	platforms = 'platforms',
@@ -18,6 +18,13 @@ local function put_attribute(bufnr, name, attribute)
 	vim.fn.appendbufline(bufnr, '$', string.format('    %s', attribute.description))
 	vim.cmd 'normal! Ggww'
 	vim.fn.appendbufline(bufnr, '$', '')
+	if attribute.details then
+		local value = attribute.details
+		vim.fn.appendbufline(bufnr, '$', string.format('    %s:', LABELS['details']))
+		vim.fn.appendbufline(bufnr, '$', string.format('        %s', value))
+		vim.cmd 'normal! Ggww'  -- Break line and join it with the label line
+		vim.fn.appendbufline(bufnr, '$', '')
+	end
 	for _, key in ipairs(KEYS) do
 		local value = attribute[key]
 		if value then
