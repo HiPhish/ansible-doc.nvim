@@ -1,0 +1,268 @@
+{
+    "ansible.builtin.file": {
+        "doc": {
+            "attributes": {
+                "check_mode": {
+                    "description": "Can run in check_mode and return changed status prediction without modifying target, if not supported the action will be skipped.",
+                    "support": "full"
+                },
+                "diff_mode": {
+                    "description": "Will return details on what has changed (or possibly needs changing in check_mode), when in diff mode",
+                    "details": "permissions and ownership will be shown but file contents on absent/touch will not.",
+                    "support": "partial"
+                },
+                "platform": {
+                    "description": "Target OS/families that can be operated against",
+                    "platforms": "posix",
+                    "support": "N/A"
+                }
+            },
+            "author": [
+                "Ansible Core Team",
+                "Michael DeHaan"
+            ],
+            "collection": "ansible.builtin",
+            "description": [
+                "Set attributes of files, directories, or symlinks and their targets.",
+                "Alternatively, remove files, symlinks or directories.",
+                "Many other modules support the same options as the M(ansible.builtin.file) module - including M(ansible.builtin.copy), M(ansible.builtin.template), and M(ansible.builtin.assemble).",
+                "For Windows targets, use the M(ansible.windows.win_file) module instead."
+            ],
+            "filename": "/usr/lib/python3.12/site-packages/ansible/modules/file.py",
+            "has_action": false,
+            "module": "file",
+            "options": {
+                "access_time": {
+                    "description": [
+                        "This parameter indicates the time the file's access time should be set to.",
+                        "Should be V(preserve) when no modification is required, C(YYYYMMDDHHMM.SS) when using default time format, or V(now).",
+                        "Default is V(None) meaning that V(preserve) is the default for O(state=[file,directory,link,hard]) and V(now) is default for O(state=touch)."
+                    ],
+                    "type": "str",
+                    "version_added": "2.7",
+                    "version_added_collection": "ansible.builtin"
+                },
+                "access_time_format": {
+                    "default": "%Y%m%d%H%M.%S",
+                    "description": [
+                        "When used with O(access_time), indicates the time format that must be used.",
+                        "Based on default Python format (see time.strftime doc)."
+                    ],
+                    "type": "str",
+                    "version_added": "2.7",
+                    "version_added_collection": "ansible.builtin"
+                },
+                "attributes": {
+                    "aliases": [
+                        "attr"
+                    ],
+                    "description": [
+                        "The attributes the resulting filesystem object should have.",
+                        "To get supported flags look at the man page for I(chattr) on the target system.",
+                        "This string should contain the attributes in the same order as the one displayed by I(lsattr).",
+                        "The C(=) operator is assumed as default, otherwise C(+) or C(-) operators need to be included in the string."
+                    ],
+                    "type": "str",
+                    "version_added": "2.3",
+                    "version_added_collection": "ansible.builtin"
+                },
+                "follow": {
+                    "default": true,
+                    "description": [
+                        "This flag indicates that filesystem links, if they exist, should be followed.",
+                        "O(follow=yes) and O(state=link) can modify O(src) when combined with parameters such as O(mode).",
+                        "Previous to Ansible 2.5, this was V(false) by default.",
+                        "While creating a symlink with a non-existent destination, set O(follow) to V(false) to avoid a warning message related to permission issues. The warning message is added to notify the user that we can not set permissions to the non-existent destination."
+                    ],
+                    "type": "bool",
+                    "version_added": "1.8",
+                    "version_added_collection": "ansible.builtin"
+                },
+                "force": {
+                    "default": false,
+                    "description": [
+                        "Force the creation of the symlinks in two cases: the source file does not exist (but will appear later); the destination exists and is a file (so, we need to unlink the O(path) file and create a symlink to the O(src) file in place of it).\n"
+                    ],
+                    "type": "bool"
+                },
+                "group": {
+                    "description": [
+                        "Name of the group that should own the filesystem object, as would be fed to I(chown).",
+                        "When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+                    ],
+                    "type": "str"
+                },
+                "mode": {
+                    "description": [
+                        "The permissions the resulting filesystem object should have.",
+                        "For those used to I(/usr/bin/chmod) remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, V('644') or V('1777')) so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, V(0755)) works sometimes, but can fail in loops and some other circumstances.",
+                        "Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results.",
+                        "As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, V(u+rwx) or V(u=rw,g=r,o=r)).",
+                        "If O(mode) is not specified and the destination filesystem object B(does not) exist, the default C(umask) on the system will be used when setting the mode for the newly created filesystem object.",
+                        "If O(mode) is not specified and the destination filesystem object B(does) exist, the mode of the existing filesystem object will be used.",
+                        "Specifying O(mode) is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+                    ],
+                    "type": "raw"
+                },
+                "modification_time": {
+                    "description": [
+                        "This parameter indicates the time the file's modification time should be set to.",
+                        "Should be V(preserve) when no modification is required, C(YYYYMMDDHHMM.SS) when using default time format, or V(now).",
+                        "Default is None meaning that V(preserve) is the default for O(state=[file,directory,link,hard]) and V(now) is default for O(state=touch)."
+                    ],
+                    "type": "str",
+                    "version_added": "2.7",
+                    "version_added_collection": "ansible.builtin"
+                },
+                "modification_time_format": {
+                    "default": "%Y%m%d%H%M.%S",
+                    "description": [
+                        "When used with O(modification_time), indicates the time format that must be used.",
+                        "Based on default Python format (see time.strftime doc)."
+                    ],
+                    "type": "str",
+                    "version_added": "2.7",
+                    "version_added_collection": "ansible.builtin"
+                },
+                "owner": {
+                    "description": [
+                        "Name of the user that should own the filesystem object, as would be fed to I(chown).",
+                        "When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership.",
+                        "Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+                    ],
+                    "type": "str"
+                },
+                "path": {
+                    "aliases": [
+                        "dest",
+                        "name"
+                    ],
+                    "description": [
+                        "Path to the file being managed."
+                    ],
+                    "required": true,
+                    "type": "path"
+                },
+                "recurse": {
+                    "default": false,
+                    "description": [
+                        "Recursively set the specified file attributes on directory contents.",
+                        "This applies only when O(state) is set to V(directory)."
+                    ],
+                    "type": "bool",
+                    "version_added": "1.1",
+                    "version_added_collection": "ansible.builtin"
+                },
+                "selevel": {
+                    "description": [
+                        "The level part of the SELinux filesystem object context.",
+                        "This is the MLS/MCS attribute, sometimes known as the C(range).",
+                        "When set to V(_default), it will use the C(level) portion of the policy if available."
+                    ],
+                    "type": "str"
+                },
+                "serole": {
+                    "description": [
+                        "The role part of the SELinux filesystem object context.",
+                        "When set to V(_default), it will use the C(role) portion of the policy if available."
+                    ],
+                    "type": "str"
+                },
+                "setype": {
+                    "description": [
+                        "The type part of the SELinux filesystem object context.",
+                        "When set to V(_default), it will use the C(type) portion of the policy if available."
+                    ],
+                    "type": "str"
+                },
+                "seuser": {
+                    "description": [
+                        "The user part of the SELinux filesystem object context.",
+                        "By default it uses the V(system) policy, where applicable.",
+                        "When set to V(_default), it will use the C(user) portion of the policy if available."
+                    ],
+                    "type": "str"
+                },
+                "src": {
+                    "description": [
+                        "Path of the file to link to.",
+                        "This applies only to O(state=link) and O(state=hard).",
+                        "For O(state=link), this will also accept a non-existing path.",
+                        "Relative paths are relative to the file being created (O(path)) which is how the Unix command C(ln -s SRC DEST) treats relative paths."
+                    ],
+                    "type": "path"
+                },
+                "state": {
+                    "choices": [
+                        "absent",
+                        "directory",
+                        "file",
+                        "hard",
+                        "link",
+                        "touch"
+                    ],
+                    "description": [
+                        "If V(absent), directories will be recursively deleted, and files or symlinks will be unlinked. In the case of a directory, if C(diff) is declared, you will see the files and folders deleted listed under C(path_contents). Note that V(absent) will not cause M(ansible.builtin.file) to fail if the O(path) does not exist as the state did not change.",
+                        "If V(directory), all intermediate subdirectories will be created if they do not exist. Since Ansible 1.7 they will be created with the supplied permissions.",
+                        "If V(file), with no other options, returns the current state of C(path).",
+                        "If V(file), even with other options (such as O(mode)), the file will be modified if it exists but will NOT be created if it does not exist. Set to V(touch) or use the M(ansible.builtin.copy) or M(ansible.builtin.template) module if you want to create the file if it does not exist.",
+                        "If V(hard), the hard link will be created or changed.",
+                        "If V(link), the symbolic link will be created or changed.",
+                        "If V(touch) (new in 1.4), an empty file will be created if the file does not exist, while an existing file or directory will receive updated file access and modification times (similar to the way V(touch) works from the command line).",
+                        "Default is the current state of the file if it exists, V(directory) if O(recurse=yes), or V(file) otherwise."
+                    ],
+                    "type": "str"
+                },
+                "unsafe_writes": {
+                    "default": false,
+                    "description": [
+                        "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object.",
+                        "By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner.",
+                        "This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn't force Ansible to perform unsafe writes).",
+                        "IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption."
+                    ],
+                    "type": "bool",
+                    "version_added": "2.2",
+                    "version_added_collection": "ansible.builtin"
+                }
+            },
+            "plugin_name": "ansible.builtin.file",
+            "seealso": [
+                {
+                    "module": "ansible.builtin.assemble"
+                },
+                {
+                    "module": "ansible.builtin.copy"
+                },
+                {
+                    "module": "ansible.builtin.stat"
+                },
+                {
+                    "module": "ansible.builtin.template"
+                },
+                {
+                    "module": "ansible.windows.win_file"
+                }
+            ],
+            "short_description": "Manage files and file properties",
+            "version_added": "historical",
+            "version_added_collection": "ansible.builtin"
+        },
+        "examples": "\n- name: Change file ownership, group and permissions\n  ansible.builtin.file:\n    path: /etc/foo.conf\n    owner: foo\n    group: foo\n    mode: '0644'\n\n- name: Give insecure permissions to an existing file\n  ansible.builtin.file:\n    path: /work\n    owner: root\n    group: root\n    mode: '1777'\n\n- name: Create a symbolic link\n  ansible.builtin.file:\n    src: /file/to/link/to\n    dest: /path/to/symlink\n    owner: foo\n    group: foo\n    state: link\n\n- name: Create two hard links\n  ansible.builtin.file:\n    src: '/tmp/{{ item.src }}'\n    dest: '{{ item.dest }}'\n    state: hard\n  loop:\n    - { src: x, dest: y }\n    - { src: z, dest: k }\n\n- name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)\n  ansible.builtin.file:\n    path: /etc/foo.conf\n    state: touch\n    mode: u=rw,g=r,o=r\n\n- name: Touch the same file, but add/remove some permissions\n  ansible.builtin.file:\n    path: /etc/foo.conf\n    state: touch\n    mode: u+rw,g-wx,o-rwx\n\n- name: Touch again the same file, but do not change times this makes the task idempotent\n  ansible.builtin.file:\n    path: /etc/foo.conf\n    state: touch\n    mode: u+rw,g-wx,o-rwx\n    modification_time: preserve\n    access_time: preserve\n\n- name: Create a directory if it does not exist\n  ansible.builtin.file:\n    path: /etc/some_directory\n    state: directory\n    mode: '0755'\n\n- name: Update modification and access time of given file\n  ansible.builtin.file:\n    path: /etc/some_file\n    state: file\n    modification_time: now\n    access_time: now\n\n- name: Set access time based on seconds from epoch value\n  ansible.builtin.file:\n    path: /etc/another_file\n    state: file\n    access_time: '{{ \"%Y%m%d%H%M.%S\" | strftime(stat_var.stat.atime) }}'\n\n- name: Recursively change ownership of a directory\n  ansible.builtin.file:\n    path: /etc/foo\n    state: directory\n    recurse: yes\n    owner: foo\n    group: foo\n\n- name: Remove file (delete file)\n  ansible.builtin.file:\n    path: /etc/foo.txt\n    state: absent\n\n- name: Recursively remove directory\n  ansible.builtin.file:\n    path: /etc/foo\n    state: absent\n\n",
+        "metadata": null,
+        "return": {
+            "dest": {
+                "description": "Destination file/path, equal to the value passed to O(path).",
+                "returned": "O(state=touch), O(state=hard), O(state=link)",
+                "sample": "/path/to/file.txt",
+                "type": "str"
+            },
+            "path": {
+                "description": "Destination file/path, equal to the value passed to O(path).",
+                "returned": "O(state=absent), O(state=directory), O(state=file)",
+                "sample": "/path/to/file.txt",
+                "type": "str"
+            }
+        }
+    }
+}
