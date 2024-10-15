@@ -45,6 +45,7 @@ there are a couple of things I would like to do before I call this plugin
 finished:
 
 - Handle inline links (`L(<text>,<url)`) in a reasonable way
+- Make `gO` work (open table of contents in location list)
 - Proper formatting (with line breaks and stuff) and highlighting (as YAML) of
   sample values
 - A library API (Lua and Vim script)
