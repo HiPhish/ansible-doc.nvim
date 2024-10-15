@@ -36,6 +36,22 @@ give it the name of the module as the one and only argument.
    AnsibleDoc ansible.builtin.command
 
 
+Status
+######
+
+It mostly works, but because there is no official JSON schema for the output of
+`ansible-doc` there is a chance that I missed something.  Other than testing
+there are a couple of things I would like to do before I call this plugin
+finished:
+
+- Handle inline links (`L(<text>,<url)`) in a reasonable way
+- Proper formatting (with line breaks and stuff) and highlighting (as YAML) of
+  sample values
+- A library API (Lua and Vim script)
+- Documentation covering the command, library and syntax groups that can be
+  overridden
+
+
 License
 #######
 
