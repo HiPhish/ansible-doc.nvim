@@ -45,4 +45,7 @@ describe('The documentation window', function()
 		assert.not_equal(first_window, second_window)
 	end)
 
+	it('can handle a single author', function()
+		nvim:command 'AnsibleDoc amazon.aws.aws_az_info'
+	end)
 end)
