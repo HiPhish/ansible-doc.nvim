@@ -27,7 +27,7 @@ local function put_option(bufnr, name, option)
 	vim.fn.appendbufline(bufnr, '$', '')
 	for _, key in ipairs(keys) do
 		local value = option[key]
-		if value then
+		if value ~= nil then
 			vim.fn.appendbufline(bufnr, '$', string.format('    %s: %s', labels[key], value))
 		end
 	end

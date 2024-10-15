@@ -30,7 +30,7 @@ local function put_attribute(bufnr, name, attribute)
 	end
 	for _, key in ipairs(KEYS) do
 		local value = attribute[key]
-		if value then
+		if value ~= nil then
 			vim.fn.appendbufline(bufnr, '$', string.format('    %s: %s', LABELS[key], value))
 		end
 	end
