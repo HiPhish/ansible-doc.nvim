@@ -20,7 +20,15 @@ local function complete(arg_lead, _cmd_line, _cursor_pos)
 	return vim.tbl_filter(pred, all_entries)
 end
 
-local function render_doc(params)
+local render_doc
+local function follow_xref()
+	local cWORD = vim.fn.matchstr(vim.fn.expand('<cWORD>'), [[\vM\(\zs(\w+\.)*\w+\ze\)]])
+	if cWORD ~= '' then
+		render_doc({fargs={cWORD}})
+	end
+end
+
+function render_doc(params)
 	local name = params.fargs[1]
 	local doc = ansible_doc.doc(name)
 	local bufname = string.format('ansibledoc://%s', name)
@@ -67,6 +75,7 @@ local function render_doc(params)
 		ansible_doc.render(buffer, doc)
 		api.nvim_set_option_value('modifiable', false, {buf=buffer})
 		api.nvim_set_option_value('readonly', true, {buf=buffer})
+		vim.keymap.set('n', 'K', follow_xref, {buffer = buffer, remap = false})
 	end
 	api.nvim_win_set_cursor(0, {1, 0})
 end
