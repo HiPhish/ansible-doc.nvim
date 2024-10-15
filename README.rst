@@ -51,6 +51,8 @@ finished:
 - A library API (Lua and Vim script)
 - Documentation covering the command, library and syntax groups that can be
   overridden
+- Some warning mechanism to detect unhandled keys in the JSON; otherwise I
+  will miss it when there is something missing from the rendered document
 
 
 License
