@@ -37,6 +37,13 @@ describe('The documentation window', function()
 		assert.are_equal(other_window, nvim:get_current_win())
 	end)
 
+	it('can handle missing keys in a document', function()
+		local first_window = nvim:get_current_win()
+		-- This module has no notes
+		nvim:command 'AnsibleDoc ansible.builtin.file'
+		local second_window = nvim:get_current_win()
+		assert.not_equal(first_window, second_window)
+	end)
 
 	describe('the buffer options', function()
 		before_each(function()
