@@ -1,0 +1,552 @@
+{
+    "amazon.aws.backup_plan": {
+        "doc": {
+            "author": [
+                "Kristof Imre Szabo (@krisek)",
+                "Alina Buzachis (@alinabuzachis)",
+                "Helen Bailey (@hakbailey)"
+            ],
+            "collection": "amazon.aws",
+            "description": [
+                "Creates, updates, or deletes AWS Backup Plans.",
+                "For more information see the AWS documentation for Backup plans U(https://docs.aws.amazon.com/aws-backup/latest/devguide/about-backup-plans.html)."
+            ],
+            "filename": "/usr/lib/python3.12/site-packages/ansible_collections/amazon/aws/plugins/modules/backup_plan.py",
+            "has_action": false,
+            "module": "backup_plan",
+            "notes": [
+                "B(Caution:) For modules, environment variables and configuration files are read from the Ansible 'host' context and not the 'controller' context. As such, files may need to be explicitly copied to the 'host'.  For lookup and connection plugins, environment variables and configuration files are read from the Ansible 'controller' context and not the 'host' context.",
+                "The AWS SDK (boto3) that Ansible uses may also read defaults for credentials and other settings, such as the region, from its configuration files in the Ansible 'host' context (typically C(~/.aws/credentials)). See U(https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) for more information."
+            ],
+            "options": {
+                "access_key": {
+                    "aliases": [
+                        "aws_access_key_id",
+                        "aws_access_key",
+                        "ec2_access_key"
+                    ],
+                    "description": [
+                        "AWS access key ID.",
+                        "See the AWS documentation for more information about access tokens U(https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).",
+                        "The C(AWS_ACCESS_KEY_ID), C(AWS_ACCESS_KEY) or C(EC2_ACCESS_KEY) environment variables may also be used in decreasing order of preference.",
+                        "The I(aws_access_key) and I(profile) options are mutually exclusive.",
+                        "The I(aws_access_key_id) alias was added in release 5.1.0 for consistency with the AWS botocore SDK.",
+                        "The I(ec2_access_key) alias has been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_ACCESS_KEY) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "advanced_backup_settings": {
+                    "description": [
+                        "Specifies a list of advanced backup settings for each resource type.",
+                        "These settings are only available for Windows Volume Shadow Copy Service (VSS) backup jobs."
+                    ],
+                    "elements": "dict",
+                    "required": false,
+                    "suboptions": {
+                        "backup_options": {
+                            "description": [
+                                "Specifies the backup option for a selected resource.",
+                                "This option is only available for Windows VSS backup jobs."
+                            ],
+                            "suboptions": {
+                                "WindowsVSS": {
+                                    "choices": [
+                                        "enabled",
+                                        "disabled"
+                                    ],
+                                    "description": "Enable or disable WindowsVSS backup option.",
+                                    "type": "str"
+                                }
+                            },
+                            "type": "dict"
+                        },
+                        "resource_type": {
+                            "choices": [
+                                "EC2"
+                            ],
+                            "description": [
+                                "Specifies an object containing resource type and backup options.",
+                                "The only supported resource type is Amazon EC2 instances with Windows Volume Shadow Copy Service (VSS)."
+                            ],
+                            "type": "str"
+                        }
+                    },
+                    "type": "list"
+                },
+                "aws_ca_bundle": {
+                    "description": [
+                        "The location of a CA Bundle to use when validating SSL certificates.",
+                        "The C(AWS_CA_BUNDLE) environment variable may also be used."
+                    ],
+                    "type": "path"
+                },
+                "aws_config": {
+                    "description": [
+                        "A dictionary to modify the botocore configuration.",
+                        "Parameters can be found in the AWS documentation U(https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config)."
+                    ],
+                    "type": "dict"
+                },
+                "backup_plan_name": {
+                    "aliases": [
+                        "name"
+                    ],
+                    "description": [
+                        "The display name of a backup plan. Must contain 1 to 50 alphanumeric or '-_.' characters."
+                    ],
+                    "required": true,
+                    "type": "str"
+                },
+                "creator_request_id": {
+                    "description": "Identifies the request and allows failed requests to be retried without the risk of running the operation twice. If the request includes a CreatorRequestId that matches an existing backup plan, that plan is returned.",
+                    "type": "str"
+                },
+                "debug_botocore_endpoint_logs": {
+                    "default": false,
+                    "description": [
+                        "Use a C(botocore.endpoint) logger to parse the unique (rather than total) C(\"resource:action\") API calls made during a task, outputing the set to the resource_actions key in the task results. Use the C(aws_resource_action) callback to output to total list made during a playbook.",
+                        "The C(ANSIBLE_DEBUG_BOTOCORE_LOGS) environment variable may also be used."
+                    ],
+                    "type": "bool"
+                },
+                "endpoint_url": {
+                    "aliases": [
+                        "ec2_url",
+                        "aws_endpoint_url",
+                        "s3_url"
+                    ],
+                    "description": [
+                        "URL to connect to instead of the default AWS endpoints.  While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS.",
+                        "The  C(AWS_URL) or C(EC2_URL) environment variables may also be used, in decreasing order of preference.",
+                        "The I(ec2_url) and I(s3_url) aliases have been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_URL) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "profile": {
+                    "aliases": [
+                        "aws_profile"
+                    ],
+                    "description": [
+                        "A named AWS profile to use for authentication.",
+                        "See the AWS documentation for more information about named profiles U(https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).",
+                        "The C(AWS_PROFILE) environment variable may also be used.",
+                        "The I(profile) option is mutually exclusive with the I(aws_access_key), I(aws_secret_key) and I(security_token) options."
+                    ],
+                    "type": "str"
+                },
+                "purge_tags": {
+                    "default": true,
+                    "description": [
+                        "If I(purge_tags=true) and I(tags) is set, existing tags will be purged from the resource to match exactly what is defined by I(tags) parameter.",
+                        "If the I(tags) parameter is not set then tags will not be modified, even if I(purge_tags=True).",
+                        "Tag keys beginning with C(aws:) are reserved by Amazon and can not be modified.  As such they will be ignored for the purposes of the I(purge_tags) parameter.  See the Amazon documentation for more information U(https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions)."
+                    ],
+                    "required": false,
+                    "type": "bool"
+                },
+                "region": {
+                    "aliases": [
+                        "aws_region",
+                        "ec2_region"
+                    ],
+                    "description": [
+                        "The AWS region to use.",
+                        "For global services such as IAM, Route53 and CloudFront, I(region) is ignored.",
+                        "The C(AWS_REGION) or C(EC2_REGION) environment variables may also be used.",
+                        "See the Amazon AWS documentation for more information U(http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region).",
+                        "The C(ec2_region) alias has been deprecated and will be removed in a release after 2024-12-01",
+                        "Support for the C(EC2_REGION) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "rules": {
+                    "description": [
+                        "An array of BackupRule objects, each of which specifies a scheduled task that is used to back up a selection of resources.",
+                        "Required when O(state=present)."
+                    ],
+                    "elements": "dict",
+                    "suboptions": {
+                        "completion_window_minutes": {
+                            "default": 10080,
+                            "description": [
+                                "A value in minutes after a backup job is successfully started before it must be completed or it will be canceled by Backup.",
+                                "AWS default if not supplied is V(10080)."
+                            ],
+                            "type": "int"
+                        },
+                        "copy_actions": {
+                            "description": "An array of copy_action objects, which contains the details of the copy operation.",
+                            "elements": "dict",
+                            "suboptions": {
+                                "destination_backup_vault_arn": {
+                                    "description": "An Amazon Resource Name (ARN) that uniquely identifies the destination backup vault for the copied backup.",
+                                    "required": true,
+                                    "type": "str"
+                                },
+                                "lifecycle": {
+                                    "description": [
+                                        "Contains an array of Transition objects specifying how long in days before a recovery point transitions to cold storage or is deleted.",
+                                        "Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, on the console, the \"retention\" setting must be 90 days greater than the \"transition to cold after days\" setting. The \"transition to cold after days\" setting cannot be changed after a backup has been transitioned to cold."
+                                    ],
+                                    "suboptions": {
+                                        "delete_after_days": {
+                                            "description": "Specifies the number of days after creation that a recovery point is deleted. Must be greater than V(90) days plus O(rules.copy_actions.lifecycle.move_to_cold_storage_after_days).",
+                                            "type": "int"
+                                        },
+                                        "move_to_cold_storage_after_days": {
+                                            "description": "Specifies the number of days after creation that a recovery point is moved to cold storage.",
+                                            "type": "int"
+                                        }
+                                    },
+                                    "type": "dict"
+                                }
+                            },
+                            "type": "list"
+                        },
+                        "enable_continuous_backup": {
+                            "default": false,
+                            "description": [
+                                "Specifies whether Backup creates continuous backups. True causes Backup to create continuous backups capable of point-in-time restore (PITR). False (or not specified) causes Backup to create snapshot backups.",
+                                "AWS default if not supplied is V(false)."
+                            ],
+                            "type": "bool"
+                        },
+                        "lifecycle": {
+                            "description": [
+                                "The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. Backup will transition and expire backups automatically according to the lifecycle that you define.",
+                                "Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the \"retention\" setting must be 90 days greater than the \"transition to cold after days\" setting. The \"transition to cold after days\" setting cannot be changed after a backup has been transitioned to cold."
+                            ],
+                            "suboptions": {
+                                "delete_after_days": {
+                                    "description": "Specifies the number of days after creation that a recovery point is deleted. Must be greater than V(90) days plus O(rules.lifecycle.move_to_cold_storage_after_days).",
+                                    "type": "int"
+                                },
+                                "move_to_cold_storage_after_days": {
+                                    "description": "Specifies the number of days after creation that a recovery point is moved to cold storage.",
+                                    "type": "int"
+                                }
+                            },
+                            "type": "dict"
+                        },
+                        "recovery_point_tags": {
+                            "description": "To help organize your resources, you can assign your own metadata to the resources that you create.",
+                            "type": "dict"
+                        },
+                        "rule_name": {
+                            "description": "Name of the rule.",
+                            "required": true,
+                            "type": "str"
+                        },
+                        "schedule_expression": {
+                            "default": "cron(0 5 ? * * *)",
+                            "description": "A CRON expression in UTC specifying when Backup initiates a backup job. AWS default is used if not supplied.",
+                            "type": "str"
+                        },
+                        "schedule_expression_timezone": {
+                            "default": "Etc/UTC",
+                            "description": [
+                                "This is the timezone in which the schedule expression is set.",
+                                "By default, ScheduleExpressions are in UTC. You can modify this to a specified timezone.",
+                                "This option requires botocore >= 1.31.36."
+                            ],
+                            "required": false,
+                            "type": "str",
+                            "version_added": "7.3.0",
+                            "version_added_collection": "amazon.aws"
+                        },
+                        "start_window_minutes": {
+                            "default": 480,
+                            "description": [
+                                "A value in minutes after a backup is scheduled before a job will be canceled if it doesn't start successfully. If this value is included, it must be at least 60 minutes to avoid errors.",
+                                "AWS default if not supplied is V(480)."
+                            ],
+                            "type": "int"
+                        },
+                        "target_backup_vault_name": {
+                            "description": "Name of the Backup Vault this rule should target.",
+                            "required": true,
+                            "type": "str"
+                        }
+                    },
+                    "type": "list"
+                },
+                "secret_key": {
+                    "aliases": [
+                        "aws_secret_access_key",
+                        "aws_secret_key",
+                        "ec2_secret_key"
+                    ],
+                    "description": [
+                        "AWS secret access key.",
+                        "See the AWS documentation for more information about access tokens U(https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).",
+                        "The C(AWS_SECRET_ACCESS_KEY), C(AWS_SECRET_KEY), or C(EC2_SECRET_KEY) environment variables may also be used in decreasing order of preference.",
+                        "The I(secret_key) and I(profile) options are mutually exclusive.",
+                        "The I(aws_secret_access_key) alias was added in release 5.1.0 for consistency with the AWS botocore SDK.",
+                        "The I(ec2_secret_key) alias has been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_SECRET_KEY) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "session_token": {
+                    "aliases": [
+                        "aws_session_token",
+                        "security_token",
+                        "aws_security_token",
+                        "access_token"
+                    ],
+                    "description": [
+                        "AWS STS session token for use with temporary credentials.",
+                        "See the AWS documentation for more information about access tokens U(https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).",
+                        "The C(AWS_SESSION_TOKEN), C(AWS_SECURITY_TOKEN) or C(EC2_SECURITY_TOKEN) environment variables may also be used in decreasing order of preference.",
+                        "The I(security_token) and I(profile) options are mutually exclusive.",
+                        "Aliases I(aws_session_token) and I(session_token) were added in release 3.2.0, with the parameter being renamed from I(security_token) to I(session_token) in release 6.0.0.",
+                        "The I(security_token), I(aws_security_token), and I(access_token) aliases have been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_SECRET_KEY) and C(AWS_SECURITY_TOKEN) environment variables has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "state": {
+                    "choices": [
+                        "present",
+                        "absent"
+                    ],
+                    "default": "present",
+                    "description": [
+                        "Create/update or delete a backup plan."
+                    ],
+                    "type": "str"
+                },
+                "tags": {
+                    "aliases": [
+                        "resource_tags",
+                        "backup_plan_tags"
+                    ],
+                    "description": "To help organize your resources, you can assign your own metadata to the resources that you create. Each tag is a key-value pair. The specified tags are assigned to all backups created with this plan.",
+                    "required": false,
+                    "type": "dict"
+                },
+                "validate_certs": {
+                    "default": true,
+                    "description": [
+                        "When set to C(false), SSL certificates will not be validated for communication with the AWS APIs.",
+                        "Setting I(validate_certs=false) is strongly discouraged, as an alternative, consider setting I(aws_ca_bundle) instead."
+                    ],
+                    "type": "bool"
+                }
+            },
+            "plugin_name": "amazon.aws.backup_plan",
+            "requirements": [
+                "python >= 3.6",
+                "boto3 >= 1.26.0",
+                "botocore >= 1.29.0"
+            ],
+            "short_description": "Manage AWS Backup Plans",
+            "version_added": "6.0.0",
+            "version_added_collection": "amazon.aws"
+        },
+        "examples": "\n- name: Create an AWSbackup plan\n  amazon.aws.backup_plan:\n    state: present\n    backup_plan_name: elastic\n    rules:\n      - rule_name: daily\n        advanced_backup_settings:\n          - resource_type: \"EC2\"\n            backup_options:\n              WindowsVSS: enabled\n        target_backup_vault_name: \"{{ backup_vault_name }}\"\n        schedule_expression: 'cron(0 5 ? * * *)'\n        start_window_minutes: 60\n        completion_window_minutes: 1440\n- name: Delete an AWS Backup plan\n  amazon.aws.backup_plan:\n    backup_plan_name: elastic\n    state: absent\n",
+        "metadata": null,
+        "return": {
+            "backup_plan": {
+                "contains": {
+                    "advanced_backup_settings": {
+                        "contains": {
+                            "backup_options": {
+                                "description": "Backup options of the advanced settings.",
+                                "sample": {
+                                    "windows_vss": "enabled"
+                                },
+                                "type": "dict"
+                            },
+                            "resource_type": {
+                                "description": "Resource type of the advanced settings.",
+                                "sample": "EC2",
+                                "type": "str"
+                            }
+                        },
+                        "description": "Advanced backup settings of the backup plan.",
+                        "elements": "dict",
+                        "returned": "when configured.",
+                        "sample": [
+                            {
+                                "backup_options": {
+                                    "windows_vss": "enabled"
+                                },
+                                "resource_type": "EC2"
+                            }
+                        ],
+                        "type": "list"
+                    },
+                    "backup_plan_name": {
+                        "description": "The display name of a backup plan.",
+                        "returned": "always",
+                        "sample": "elastic",
+                        "type": "str"
+                    },
+                    "rules": {
+                        "contains": {
+                            "completion_window_minutes": {
+                                "description": [
+                                    "A value in minutes after a backup job is successfully started before it must be completed or it will be canceled by Backup."
+                                ],
+                                "returned": "always",
+                                "sample": 10080,
+                                "type": "int"
+                            },
+                            "copy_actions": {
+                                "description": "An array of CopyAction objects, which contains the details of the copy operation.",
+                                "elements": "dict",
+                                "returned": "when configured.",
+                                "sample": [
+                                    {
+                                        "destination_backup_vault_arn": "arn:aws:backup:us-west-2:123456789012:backup-vault:my-test-vault",
+                                        "lifecycle": {
+                                            "delete_after_days": 100,
+                                            "move_to_cold_storage_after_days": 10
+                                        }
+                                    }
+                                ],
+                                "type": "list"
+                            },
+                            "enable_continous_backup": {
+                                "description": "Specifies whether Backup creates continuous backups.",
+                                "returned": "always",
+                                "sample": false,
+                                "type": "bool"
+                            },
+                            "lifecycle": {
+                                "description": [
+                                    "Defines when a protected resource is transitioned to cold storage and when it expires."
+                                ],
+                                "returned": "when configured.",
+                                "sample": {
+                                    "delete_after_days": 100,
+                                    "move_to_cold_storage_after_days": 10
+                                },
+                                "type": "dict"
+                            },
+                            "recovery_point_tags": {
+                                "description": [
+                                    "An array of key-value pair strings that are assigned to resources that are associated with this rule when restored from backup."
+                                ],
+                                "returned": "when configured.",
+                                "sample": {
+                                    "Tagkey1": "TagValue1",
+                                    "Tagkey2": "TagValue2"
+                                },
+                                "type": "dict"
+                            },
+                            "rule_id": {
+                                "description": [
+                                    "Uniquely identifies a rule that is used to schedule the backup of a selection of resources."
+                                ],
+                                "returned": "always",
+                                "sample": "973621ef-d863-41ef-b5c3-9e943a64ad0c",
+                                "type": "str"
+                            },
+                            "rule_name": {
+                                "description": "A display name for a backup rule.",
+                                "returned": "always",
+                                "sample": "daily",
+                                "type": "str"
+                            },
+                            "schedule_expression": {
+                                "description": "A cron expression in UTC specifying when Backup initiates a backup job.",
+                                "returned": "always",
+                                "sample": "cron(0 5 ? * * *)",
+                                "type": "str"
+                            },
+                            "schedule_expression_timezone": {
+                                "description": [
+                                    "This is the timezone in which the schedule expression is set.",
+                                    "This information is returned for botocore versions >= 1.31.36."
+                                ],
+                                "returned": "when botocore >= 1.31.36",
+                                "sample": "Etc/UTC",
+                                "type": "str",
+                                "version_added": "7.3.0",
+                                "version_added_collection": "amazon.aws"
+                            },
+                            "start_window_minutes": {
+                                "description": [
+                                    "A value in minutes after a backup is scheduled before a job will be canceled if it doesn't start successfully."
+                                ],
+                                "returned": "always",
+                                "sample": 480,
+                                "type": "int"
+                            },
+                            "target_backup_vault_name": {
+                                "description": "The name of a logical container where backups are stored.",
+                                "returned": "always",
+                                "sample": "09da67966fd5-backup-vault",
+                                "type": "str"
+                            }
+                        },
+                        "description": [
+                            "An array of BackupRule objects, each of which specifies a scheduled task that is used to back up a selection of resources."
+                        ],
+                        "elements": "dict",
+                        "returned": "always",
+                        "type": "list"
+                    },
+                    "tags": {
+                        "description": "Tags of the backup plan.",
+                        "returned": "on create/update",
+                        "sample": {
+                            "TagKey1": "TagValue1",
+                            "TagKey2": "TagValue2"
+                        },
+                        "type": "str"
+                    }
+                },
+                "description": "Backup plan details.",
+                "returned": "on create/update",
+                "type": "dict"
+            },
+            "backup_plan_arn": {
+                "description": "ARN of the backup plan.",
+                "returned": "always",
+                "sample": "arn:aws:backup:eu-central-1:111122223333:backup-plan:1111f877-1ecf-4d79-9718-a861cd09df3b",
+                "type": "str"
+            },
+            "backup_plan_id": {
+                "description": "ID of the backup plan.",
+                "returned": "always",
+                "sample": "1111f877-1ecf-4d79-9718-a861cd09df3b",
+                "type": "str"
+            },
+            "backup_plan_name": {
+                "description": "Name of the backup plan.",
+                "returned": "always",
+                "sample": "elastic",
+                "type": "str"
+            },
+            "creation_date": {
+                "description": "Creation date of the backup plan.",
+                "returned": "on create/update",
+                "sample": "2023-01-24T10:08:03.193000+01:00",
+                "type": "str"
+            },
+            "deletion_date": {
+                "description": "Date the backup plan was deleted.",
+                "returned": "on delete",
+                "sample": "2023-05-05T16:24:51.987000-04:00",
+                "type": "str"
+            },
+            "exists": {
+                "description": "Whether the resource exists.",
+                "returned": "always",
+                "sample": true,
+                "type": "bool"
+            },
+            "version_id": {
+                "description": "Version ID of the backup plan.",
+                "returned": "always",
+                "sample": "ODM3MjVjNjItYWFkOC00NjExLWIwZTYtZDNiNGI5M2I0ZTY1",
+                "type": "str"
+            }
+        }
+    }
+}

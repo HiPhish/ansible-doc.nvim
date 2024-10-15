@@ -22,7 +22,11 @@ local function put_option(bufnr, name, option)
 	else
 		vim.api.nvim_buf_add_highlight(bufnr, -1, 'ansibledocOption', linenr, 2, 2 + #name)
 	end
-	vim.fn.appendbufline(bufnr, '$', string.format('    %s', table.concat(option.description, '  ')))
+	local description = option.description
+	if type(description) == 'table' then
+		description = table.concat(description, '  ')
+	end
+	vim.fn.appendbufline(bufnr, '$', string.format('    %s', description))
 	vim.cmd 'normal! Ggww'
 	vim.fn.appendbufline(bufnr, '$', '')
 	for _, key in ipairs(keys) do

@@ -48,4 +48,12 @@ describe('The documentation window', function()
 	it('can handle a single author', function()
 		nvim:command 'AnsibleDoc amazon.aws.aws_az_info'
 	end)
+
+	it('can handle a single line of description', function()
+		nvim:command 'AnsibleDoc amazon.aws.backup_plan'
+	end)
+
+	it('can handle a missing sample', function()
+		nvim:command 'AnsibleDoc amazon.aws.backup_plan'
+	end)
 end)

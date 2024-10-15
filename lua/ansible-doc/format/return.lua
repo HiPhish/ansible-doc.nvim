@@ -48,7 +48,9 @@ local function put_item(bufnr, name, item)
 	for _, key in ipairs(KEYS) do
 		appendbufline(bufnr, '$', string.format('    %s: %s', LABELS[key], item[key]))
 	end
-	appendbufline(bufnr, '$', string.format('    %s: %s', LABELS.sample, format_sample(item.sample)))
+	if item.sample ~= nil then
+		appendbufline(bufnr, '$', string.format('    %s: %s', LABELS.sample, format_sample(item.sample)))
+	end
 end
 
 return function(bufnr, items)

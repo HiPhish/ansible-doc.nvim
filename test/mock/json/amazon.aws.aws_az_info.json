@@ -1,0 +1,280 @@
+{
+    "amazon.aws.aws_az_info": {
+        "doc": {
+            "author": "Henrique Rodrigues (@Sodki)",
+            "collection": "amazon.aws",
+            "description": [
+                "Gather information about availability zones in AWS."
+            ],
+            "filename": "/usr/lib/python3.12/site-packages/ansible_collections/amazon/aws/plugins/modules/aws_az_info.py",
+            "has_action": false,
+            "module": "aws_az_info",
+            "notes": [
+                "B(Caution:) For modules, environment variables and configuration files are read from the Ansible 'host' context and not the 'controller' context. As such, files may need to be explicitly copied to the 'host'.  For lookup and connection plugins, environment variables and configuration files are read from the Ansible 'controller' context and not the 'host' context.",
+                "The AWS SDK (boto3) that Ansible uses may also read defaults for credentials and other settings, such as the region, from its configuration files in the Ansible 'host' context (typically C(~/.aws/credentials)). See U(https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) for more information."
+            ],
+            "options": {
+                "access_key": {
+                    "aliases": [
+                        "aws_access_key_id",
+                        "aws_access_key",
+                        "ec2_access_key"
+                    ],
+                    "description": [
+                        "AWS access key ID.",
+                        "See the AWS documentation for more information about access tokens U(https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).",
+                        "The C(AWS_ACCESS_KEY_ID), C(AWS_ACCESS_KEY) or C(EC2_ACCESS_KEY) environment variables may also be used in decreasing order of preference.",
+                        "The I(aws_access_key) and I(profile) options are mutually exclusive.",
+                        "The I(aws_access_key_id) alias was added in release 5.1.0 for consistency with the AWS botocore SDK.",
+                        "The I(ec2_access_key) alias has been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_ACCESS_KEY) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "aws_ca_bundle": {
+                    "description": [
+                        "The location of a CA Bundle to use when validating SSL certificates.",
+                        "The C(AWS_CA_BUNDLE) environment variable may also be used."
+                    ],
+                    "type": "path"
+                },
+                "aws_config": {
+                    "description": [
+                        "A dictionary to modify the botocore configuration.",
+                        "Parameters can be found in the AWS documentation U(https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config)."
+                    ],
+                    "type": "dict"
+                },
+                "debug_botocore_endpoint_logs": {
+                    "default": false,
+                    "description": [
+                        "Use a C(botocore.endpoint) logger to parse the unique (rather than total) C(\"resource:action\") API calls made during a task, outputing the set to the resource_actions key in the task results. Use the C(aws_resource_action) callback to output to total list made during a playbook.",
+                        "The C(ANSIBLE_DEBUG_BOTOCORE_LOGS) environment variable may also be used."
+                    ],
+                    "type": "bool"
+                },
+                "endpoint_url": {
+                    "aliases": [
+                        "ec2_url",
+                        "aws_endpoint_url",
+                        "s3_url"
+                    ],
+                    "description": [
+                        "URL to connect to instead of the default AWS endpoints.  While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS.",
+                        "The  C(AWS_URL) or C(EC2_URL) environment variables may also be used, in decreasing order of preference.",
+                        "The I(ec2_url) and I(s3_url) aliases have been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_URL) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "filters": {
+                    "default": {},
+                    "description": [
+                        "A dict of filters to apply.",
+                        "Each dict item consists of a filter key and a filter value.",
+                        "See U(https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeAvailabilityZones.html) for possible filters.",
+                        "Filter names and values are case sensitive.",
+                        "You can use underscores instead of dashes (-) in the filter keys.",
+                        "Filter keys with underscores will take precedence in case of conflict."
+                    ],
+                    "required": false,
+                    "type": "dict"
+                },
+                "profile": {
+                    "aliases": [
+                        "aws_profile"
+                    ],
+                    "description": [
+                        "A named AWS profile to use for authentication.",
+                        "See the AWS documentation for more information about named profiles U(https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html).",
+                        "The C(AWS_PROFILE) environment variable may also be used.",
+                        "The I(profile) option is mutually exclusive with the I(aws_access_key), I(aws_secret_key) and I(security_token) options."
+                    ],
+                    "type": "str"
+                },
+                "region": {
+                    "aliases": [
+                        "aws_region",
+                        "ec2_region"
+                    ],
+                    "description": [
+                        "The AWS region to use.",
+                        "For global services such as IAM, Route53 and CloudFront, I(region) is ignored.",
+                        "The C(AWS_REGION) or C(EC2_REGION) environment variables may also be used.",
+                        "See the Amazon AWS documentation for more information U(http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region).",
+                        "The C(ec2_region) alias has been deprecated and will be removed in a release after 2024-12-01",
+                        "Support for the C(EC2_REGION) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "secret_key": {
+                    "aliases": [
+                        "aws_secret_access_key",
+                        "aws_secret_key",
+                        "ec2_secret_key"
+                    ],
+                    "description": [
+                        "AWS secret access key.",
+                        "See the AWS documentation for more information about access tokens U(https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).",
+                        "The C(AWS_SECRET_ACCESS_KEY), C(AWS_SECRET_KEY), or C(EC2_SECRET_KEY) environment variables may also be used in decreasing order of preference.",
+                        "The I(secret_key) and I(profile) options are mutually exclusive.",
+                        "The I(aws_secret_access_key) alias was added in release 5.1.0 for consistency with the AWS botocore SDK.",
+                        "The I(ec2_secret_key) alias has been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_SECRET_KEY) environment variable has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "session_token": {
+                    "aliases": [
+                        "aws_session_token",
+                        "security_token",
+                        "aws_security_token",
+                        "access_token"
+                    ],
+                    "description": [
+                        "AWS STS session token for use with temporary credentials.",
+                        "See the AWS documentation for more information about access tokens U(https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys).",
+                        "The C(AWS_SESSION_TOKEN), C(AWS_SECURITY_TOKEN) or C(EC2_SECURITY_TOKEN) environment variables may also be used in decreasing order of preference.",
+                        "The I(security_token) and I(profile) options are mutually exclusive.",
+                        "Aliases I(aws_session_token) and I(session_token) were added in release 3.2.0, with the parameter being renamed from I(security_token) to I(session_token) in release 6.0.0.",
+                        "The I(security_token), I(aws_security_token), and I(access_token) aliases have been deprecated and will be removed in a release after 2024-12-01.",
+                        "Support for the C(EC2_SECRET_KEY) and C(AWS_SECURITY_TOKEN) environment variables has been deprecated and will be removed in a release after 2024-12-01."
+                    ],
+                    "type": "str"
+                },
+                "validate_certs": {
+                    "default": true,
+                    "description": [
+                        "When set to C(false), SSL certificates will not be validated for communication with the AWS APIs.",
+                        "Setting I(validate_certs=false) is strongly discouraged, as an alternative, consider setting I(aws_ca_bundle) instead."
+                    ],
+                    "type": "bool"
+                }
+            },
+            "plugin_name": "amazon.aws.aws_az_info",
+            "requirements": [
+                "python >= 3.6",
+                "boto3 >= 1.26.0",
+                "botocore >= 1.29.0"
+            ],
+            "short_description": "Gather information about availability zones in AWS",
+            "version_added": "1.0.0",
+            "version_added_collection": "amazon.aws"
+        },
+        "examples": "\n# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Gather information about all availability zones\n  amazon.aws.aws_az_info:\n\n- name: Gather information about a single availability zone\n  amazon.aws.aws_az_info:\n    filters:\n      zone-name: eu-west-1a\n\n- name: Gather information in a availability zones based on their state, such as \"available\"\n  amazon.aws.aws_az_info:\n    region: us-east-1\n    filters:\n      state: available\n",
+        "metadata": null,
+        "return": {
+            "availability_zones": {
+                "contains": {
+                    "group_name": {
+                        "description": [
+                            "The name of the associated group.",
+                            "For availability zones, this will be the same as RV(availability_zones.region_name)."
+                        ],
+                        "returned": "on success",
+                        "sample": "us-east-1",
+                        "type": "str"
+                    },
+                    "messages": {
+                        "contains": {
+                            "message": {
+                                "description": "The message about the availability zone.",
+                                "returned": "on success",
+                                "sample": "msg",
+                                "type": "str"
+                            }
+                        },
+                        "description": "List of messages about the availability zone.",
+                        "elements": "dict",
+                        "returned": "on success",
+                        "sample": [
+                            {
+                                "message": "message_one"
+                            },
+                            {
+                                "message": "message_two"
+                            }
+                        ],
+                        "type": "list"
+                    },
+                    "network_border_group": {
+                        "description": "The name of the network border group.",
+                        "returned": "on success",
+                        "sample": "us-east-1",
+                        "type": "str"
+                    },
+                    "opt_in_status": {
+                        "description": [
+                            "The opt-in status.",
+                            "The value is always C(opt-in-not-required) for availability zones."
+                        ],
+                        "returned": "on success",
+                        "sample": "opt-in-not-required",
+                        "type": "str"
+                    },
+                    "region_name": {
+                        "description": "The name of the region.",
+                        "returned": "on success",
+                        "sample": "us-east-1",
+                        "type": "str"
+                    },
+                    "state": {
+                        "description": [
+                            "The state of the availability zone.",
+                            "The value is always C(available)."
+                        ],
+                        "returned": "on success",
+                        "sample": "available",
+                        "type": "str"
+                    },
+                    "zone_id": {
+                        "description": "The ID of the availability zone.",
+                        "returned": "on success",
+                        "sample": "use1-az5",
+                        "type": "str"
+                    },
+                    "zone_name": {
+                        "description": "The name of the availability zone.",
+                        "returned": "on success",
+                        "sample": "us-east-1e",
+                        "type": "str"
+                    },
+                    "zone_type": {
+                        "description": "The type of zone.",
+                        "returned": "on success",
+                        "sample": "availability-zone",
+                        "type": "str"
+                    }
+                },
+                "description": "Availability zones that match the provided filters. Each element consists of a dict with all the information related to that available zone.\n",
+                "elements": "dict",
+                "returned": "on success",
+                "sample": [
+                    {
+                        "group_name": "us-east-1",
+                        "messages": [],
+                        "network_border_group": "us-east-1",
+                        "opt_in_status": "opt-in-not-required",
+                        "region_name": "us-east-1",
+                        "state": "available",
+                        "zone_id": "use1-az6",
+                        "zone_name": "us-east-1a",
+                        "zone_type": "availability-zone"
+                    },
+                    {
+                        "group_name": "us-east-1",
+                        "messages": [],
+                        "network_border_group": "us-east-1",
+                        "opt_in_status": "opt-in-not-required",
+                        "region_name": "us-east-1",
+                        "state": "available",
+                        "zone_id": "use1-az1",
+                        "zone_name": "us-east-1b",
+                        "zone_type": "availability-zone"
+                    }
+                ],
+                "type": "list"
+            }
+        }
+    }
+}
