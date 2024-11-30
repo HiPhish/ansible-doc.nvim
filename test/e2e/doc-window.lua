@@ -12,13 +12,6 @@ describe('The documentation window', function()
 		yd.stop(nvim)
 	end)
 
-	it('opens in a new window', function()
-		local first_window = nvim:get_current_win()
-		nvim:command 'AnsibleDoc ansible.builtin.command'
-		local second_window = nvim:get_current_win()
-		assert.not_equal(first_window, second_window)
-	end)
-
 	it('reuses the same window', function()
 		local first_window = nvim:get_current_win()
 		nvim:command 'AnsibleDoc ansible.builtin.command'

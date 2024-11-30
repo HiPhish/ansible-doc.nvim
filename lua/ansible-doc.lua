@@ -16,7 +16,11 @@ function M.doc(module)
 	if obj.code ~= 0 then
 		error(obj.stderr)
 	end
-	return vim.json.decode(obj.stdout)[module]
+	local result = vim.json.decode(obj.stdout)[module]
+	if result == nil then
+		error(string.format('No such module: %s', module))
+	end
+	return result
 end
 
 local render_doc = require 'ansible-doc.format.doc'
