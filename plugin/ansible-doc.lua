@@ -17,7 +17,9 @@ local function complete(arg_lead, _cmd_line, _cursor_pos)
 	if not all_entries then
 		all_entries = vim.tbl_keys(ansible_doc.list())
 	end
-	return vim.tbl_filter(pred, all_entries)
+	local candidates = vim.tbl_filter(pred, all_entries)
+	table.sort(candidates)
+	return candidates
 end
 
 local render_doc
